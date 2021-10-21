@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import { useState } from "react";
+
+import CardList from "./components/CardList";
+
+import Myform from "./components/Myform";
 
 function App() {
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      description: "Javascript its a programm language",
+      name: "Javascript",
+    },
+    {
+      id: 2,
+      description: "Javascript its a programm language",
+      name: "Javascript",
+    },
+    {
+      id: 3,
+      description: "Javascript its a programm language",
+      name: "Javascript",
+    },
+    {
+      id: 4,
+      description: "Javascript its a programm language",
+      name: "Javascript",
+    },
+  ]);
+
+
+  {/* спускаем в дочерний компонент и коллбэком вызываем*/}
+  const createPost = (postData) =>{
+    setPosts([...posts, {id:posts.length + 1, ...postData}])
+  }
+ 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Myform  createPost = {createPost}/>
+      <CardList posts={posts} title={"Posts List"} />
     </div>
   );
 }

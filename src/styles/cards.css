@@ -1,0 +1,9 @@
+.cards {
+  margin-top: 50px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 800px;
+  border: 2px solid teal;
+  padding: 15px;
+}

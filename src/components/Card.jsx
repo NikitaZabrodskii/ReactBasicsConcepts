@@ -2,14 +2,11 @@ import React from "react";
 import "../styles/cards.css";
 import Mybutton from "./UI/Button/Mybutton";
 
-const Card = ({ item }) => {
+const Card = ({ item, delPosts}) => {
 
-  const delCards = (e) =>{
-    let card = e.target.closest('.cards')
-    console.log(card.value)
-  }
+ 
   return (
-    <div className="cards" value = {item.id}>
+    <div className="cards" >
       <strong>
         
         {item.id}  {item.name}
@@ -17,7 +14,7 @@ const Card = ({ item }) => {
        
       </strong>
       <p>{item.description}</p>
-      <Mybutton onClick = {delCards} > delete </Mybutton>
+      <Mybutton onClick = {()=> delPosts(item)} > delete </Mybutton>
     </div>
   );
 };

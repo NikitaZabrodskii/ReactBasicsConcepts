@@ -9,12 +9,12 @@ const Card = ({ item, delPosts}) => {
     <div className="cards" >
       <strong>
         
-        {item.id}  {item.name}
+        {item.id}  {item.title}
 
        
       </strong>
-      <p>{item.description}</p>
-      <Mybutton onClick = {()=> delPosts(item)} > delete </Mybutton>
+      <p>{item.body}</p>
+      <Mybutton onClick = {()=> delPosts(item)} > delete </Mybutton> 
     </div>
   );
 };

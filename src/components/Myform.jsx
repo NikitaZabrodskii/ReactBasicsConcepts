@@ -3,18 +3,18 @@ import Mybutton from "./UI/Button/Mybutton";
 import Myinput from "./UI/Input/Myinput";
 
 const Myform = ({createPost}) => {
-  const [post, setPost] = useState({ name: "", description: "" });
+  const [post, setPost] = useState({ title: "", body: "" });
 
   
   const addNewPost = (e) => {
     e.preventDefault();
     let postData = {
-        description: post.description,
-        name: post.name
+      body: post.body,
+      title: post.title
     }
     createPost(postData)
     
-    setPost({name:'', description:''})
+    setPost({title:'', body:''})
     
     
   };
@@ -22,8 +22,8 @@ const Myform = ({createPost}) => {
     let value = e.target.value;
     let command = e.target.dataset.command;
     command === "name"
-      ? setPost({ ...post, name: value })
-      : setPost({ ...post, description: value });
+      ? setPost({ ...post, title: value })
+      : setPost({ ...post, body: value });
   };
   return (
     <form>

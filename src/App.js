@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect} from 'react';
 
 import CardList from './components/CardList';
 
@@ -8,32 +8,18 @@ import Myform from './components/Myform';
 
 import Postfilter from './components/Postfilter';
 import Notfound from './components/UI/Notfound';
+import { Mymodal } from './components/UI/Mymodal/Mymodal';
+import Mybutton from './components/UI/Button/Mybutton';
+import { usePosts } from './hooks/usePosts.js';
+import { useAxios } from './hooks/useAxios';
+import axios from 'axios';
 
 function App() {
-	const [posts, setPosts] = useState([
-		{
-			id: 1,
-			description: 'Javascript its a programm language',
-			name: 'Javascript',
-		},
-		{
-			id: 2,
-			description: 'Javascript its a programm language',
-			name: 'Javascript',
-		},
-		{
-			id: 3,
-			description: 'Javascript its a programm language',
-			name: 'Javascript',
-		},
-		{
-			id: 4,
-			description: 'Javascript its a programm language',
-			name: 'Javascript',
-		},
-	]);
+	const [posts, setPosts] = useState([]);
 
-  const [filter, setFilter] = useState({inputValue:'', optionValue: ''})
+	const [filter, setFilter] = useState({ inputValue: '', optionValue: '' });
+	const [modal, setModal] = useState(false);
+
 	{
 		/* спускаем в дочерний компонент и коллбэком вызываем*/
 	}
@@ -42,53 +28,54 @@ function App() {
 			...posts,
 			{ id: posts.length + 1, key: Date.now(), ...postData },
 		]);
+		setModal(false);
 	};
 
 
-  
+	useEffect(()=>{
+		fetchData()
+	}, [])
 
-	{
-		/*используем, чтобы onChange не срабатывал при каждом вводе*/
-	}
-	const sortedPosts = useMemo(() => {
-		if (filter.optionValue) {
-			return [...posts].sort((a, b) =>
-				a[filter.optionValue].localeCompare(b[filter.optionValue])
-			);
-		} else {
-			return posts;
-		}
-	}, [filter.optionValue, posts]);
-	{
-		/* массив зависимостей, при изменеии одного из них пересчитывается константа */
-	}
 
-	{
-		/*сюда передаем отсортированный массив по option и потом с помощтю includes организовываем поиск, в качестве значения передает state input.
-Зависимости, стэйт инпута и изменения в переменной с sortedPosts. Чтобы поиск не был чувствителен к регистру добавляем toLowerCase*/
-	}
-	const searchInSortedPosts = useMemo(() => {
-		return sortedPosts.filter((p) =>
-			p.name.toLowerCase().includes(filter.inputValue.toLowerCase())
+
+
+
+	async function fetchData() {
+		const response = await axios.get(
+			'https://jsonplaceholder.typicode.com/posts'
 		);
-	}, [filter.inputValue, sortedPosts]);
+		setPosts(response.data)
+	}
+
+	// const fetchData = useAxios()
+
+
+	const searchInSortedPosts = usePosts(
+		posts,
+		filter.inputValue,
+		filter.optionValue
+	);
 
 	{
 		/* тут  удаляю пост по уникальному key, который генерирую из Date.now() */
 	}
 	const delPosts = (item) => {
-		setPosts(posts.filter((p) => p.key !== item.key));
+		setPosts(posts.filter((p) => p.id !== item.id));
 		console.log(posts.length);
 	};
 	{
 		/* функция сортировки */
 	}
 
-
 	return (
 		<div>
-			<Myform createPost={createPost} />
-			<Postfilter filter = {filter} setFilter={setFilter}/>
+			<button onClick={fetchData}>fetch</button>
+			<Mybutton onClick={() => setModal(true)}>Создать пост</Mybutton>
+			<Mymodal visible={modal} setVisible={setModal}>
+				<Myform createPost={createPost} />
+			</Mymodal>
+
+			<Postfilter filter={filter} setFilter={setFilter} />
 			{searchInSortedPosts.length !== 0 ? (
 				<CardList
 					posts={searchInSortedPosts}
@@ -96,7 +83,7 @@ function App() {
 					title={'Posts List'}
 				/>
 			) : (
-				<Notfound/>
+				<Notfound />
 			)}
 		</div>
 	);

@@ -17,8 +17,8 @@ const Postfilter = ({filter, setFilter}) => {
 			<Myselect
 				value={filter.optionValue}
 				options={[
-					{ name: 'description', value: 'description' },
-					{ name: 'name', value: 'name' },
+					{ name: 'description', value: 'body' },
+					{ name: 'name', value: 'title' },
 				]}
 				changeOptionState={(e) => setFilter({...filter,optionValue:e.target.value})}
 			>
